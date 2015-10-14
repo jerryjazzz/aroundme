@@ -1,0 +1,11 @@
+<ion-view title="Nearby Places">
+    <ion-content>
+        <div class="list">
+            <a ng-repeat="place in places" class="item item-avatar item-text-wrap" href="#/places/{{place.place_id}}">
+                <img ng-src={{place.icon}}>
+                <h2>{{place.name}}</h2>
+                <p>{{place.vicinity}}</p>
+            </a>
+        </div>
+    </ion-content>
+</ion-view>
