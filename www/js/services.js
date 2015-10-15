@@ -15,7 +15,7 @@ angular.module('starter.services', [])
 						"location": coords, 
 						"radius": "1000",
 						"types": ["food"],
-						"key": API_KEY, 
+						"key": API_KEY,
 					} 
 				}).then(function(response){
 					if (response.data.status == 'OK'){
