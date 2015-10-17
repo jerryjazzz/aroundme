@@ -9,10 +9,11 @@
     <ion-content>
 		<div class="card">
 
-			<div class="item item-avatar item-text-wrap">
+			<div class="item item-avatar item-text-wrap item-button-right">
 				<img ng-src={{place.icon}}>
 				<h2>{{place.name}}</h2>
 				<p>{{place.vicinity}}</p>
+				<img ng-show="{{place.open}}" ng-src="img/now_open.png" class="button button-clear">
 			</div>
 
 			<div class="item item-body">
@@ -23,22 +24,40 @@
 						</ion-slide>				
 					</ion-slide-box>
 				</div>
-		<!-- 
-				<img class="full-image" ng-src="{{}}">
+		 
 				<p>
-				  This is a "Facebook" styled Card. The header is created from a Thumbnail List item,
-				  the content is from a card-body consisting of an image and paragraph text. The footer
-				  consists of tabs, icons aligned left, within the card-footer.
+					<div class="list">
+						<div class="item item-divider">Contacts</div>
+						<a class="item" ng-href="tel: {{place.formatted_phone_number}}">
+							<i class="icon ion-android-call"></i>
+							{{place.formatted_phone_number}}
+						</a>
+						<a class="item" href="{{place.url}}">
+							<i class="icon ion-social-google"></i>
+							Visit Google Page
+						</a>
+						<a class="item" href="{{place.website}}">
+							<i class="icon ion-earth"></i>
+							Website
+						</a>
+
+						<div class="item item-divider">Address</div>
+						<a class="item item-text-wrap" href="#">
+							{{place.formatted_address}}
+						</a>
+
+					</div>
+
 				</p>
-				<p>
+<!-- 				<p>
 				  <a href="#" class="subdued">1 Like</a>
 				  <a href="#" class="subdued">5 Comments</a>
-				</p> 
-		-->
+				</p>  -->
+		
 			</div>
 
 			<div class="item tabs tabs-secondary tabs-icon-left">
-			<a class="tab-item" href="#">
+			<a class="tab-item" ng-href="tel: {{place.formatted_phone_number}}">
 			  <i class="icon ion-android-call"></i>
 			  Call us
 			</a>

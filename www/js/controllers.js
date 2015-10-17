@@ -3,18 +3,7 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 .controller('PlacesController', function($cordovaGeolocation, $ionicFilterBar, $ionicLoading, 
 	$ionicPlatform, $scope, PlacesService) {
 
-	$scope.showFilterBar = function(){
-		$ionicFilterBar.show({
-			items: $scope.places,
-			update: function(filteredData) {
-				$scope.places = filteredData;
-			},
-			filterProperties: $scope.places.name
-		});
-	};
-
-    $ionicPlatform.ready(function() {
-		
+	$scope.init = function() {
 		$ionicLoading.show({
 	      content: 'Getting current location...',
 	      showBackdrop: false
@@ -27,7 +16,6 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
         };
 
         $cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
-
 			var coords = pos.coords.latitude + ',' + pos.coords.longitude;
 	      	console.log('Got pos', coords);
 			
@@ -45,12 +33,31 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 
 				$scope.places = places;
 			});
-
-	      	$ionicLoading.hide();
-
 	    }, function (error) {
 	      alert('Unable to get location: ' + error.message);
 	    });
+	    $ionicLoading.hide();
+	};
+
+	$scope.refresh = function() {
+		$scope.init();
+
+		//Stop the ion-refresher from spinning
+		$scope.$broadcast('scroll.refreshComplete');
+	};
+
+	$scope.showFilterBar = function(){
+		$ionicFilterBar.show({
+			items: $scope.places,
+			update: function(filteredData) {
+				$scope.places = filteredData;
+			},
+			filterProperties: $scope.places.name
+		});
+	};
+
+    $ionicPlatform.ready(function() {
+		$scope.init();
 	});
 })
 
@@ -66,6 +73,13 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 			}
 			
 		}
+
+		if(place.opening_hours && place.opening_hours.open_now){
+			place.open = true;
+		} else {
+			place.open = false;
+		}
+
 		$ionicSlideBoxDelegate.update();
 		
 		$scope.place = place;	
