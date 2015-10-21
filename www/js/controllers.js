@@ -61,7 +61,44 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 	});
 })
 
-.controller('PlaceController', function($ionicSlideBoxDelegate, $scope, $stateParams, PlacesService) {
+.controller('PlaceController', function($cordovaGeolocation, $cordovaSocialSharing, $ionicSlideBoxDelegate, 
+	$scope, $stateParams, PlacesService) {
+
+	$scope.navigate = function() {
+		var posOptions = {
+	   		enableHighAccuracy: true,
+	    	timeout: 20000,
+	    	maximumAge: 0
+	    };
+
+	    $cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
+				$scope.lat = pos.coords.latitude;
+				$scope.lng = pos.coords.longitude;
+
+				var url = "http://maps.google.com/maps?saddr=" + 
+					pos.coords.latitude + "," +
+					pos.coords.longitude + "&daddr=" + 
+					$scope.place.geometry.location.lat + "," + 
+					$scope.place.geometry.location.lng + "&dirflg=d";
+
+				window.open(url, '_system', 'location=yes'); 
+
+				return false;
+	    }, function (error) {
+	      alert('Unable to get location: ' + error.message);
+	    });
+	};
+
+	$scope.share = function() {
+		// var url = "http://maps.google.com/maps?z=18&q=" + 
+		// 	$scope.place.geometry.location.lat + "," + 
+		// 	$scope.place.geometry.location.lng;
+
+		var url = "http://maps.google.com/?ll=39.774769,-74.86084";
+		
+        $cordovaSocialSharing.share(null, null, null, url);
+	};
+
 	PlacesService.getPlace($stateParams.placeId).then(function(place){
 		console.log(place);
 		
@@ -85,4 +122,6 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 		$scope.place = place;	
 
 	});
+
+
 });

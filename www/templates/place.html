@@ -28,15 +28,15 @@
 				<p>
 					<div class="list">
 						<div class="item item-divider">Contacts</div>
-						<a class="item" ng-href="tel: {{place.formatted_phone_number}}">
+						<a class="item" ng-href="tel: {{place.formatted_phone_number}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;">
 							<i class="icon ion-android-call"></i>
 							{{place.formatted_phone_number}}
 						</a>
-						<a class="item" href="{{place.url}}">
+						<a class="item" ng-href="{{place.url}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;">
 							<i class="icon ion-social-google"></i>
 							Visit Google Page
 						</a>
-						<a class="item" href="{{place.website}}">
+						<a class="item" ng-href="{{place.website}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;">
 							<i class="icon ion-earth"></i>
 							Website
 						</a>
@@ -57,18 +57,20 @@
 			</div>
 
 			<div class="item tabs tabs-secondary tabs-icon-left">
-			<a class="tab-item" ng-href="tel: {{place.formatted_phone_number}}">
-			  <i class="icon ion-android-call"></i>
-			  Call us
-			</a>
-			<a class="tab-item" href="#">
-			  <i class="icon ion-map"></i>
-			  Map
-			</a>
-			<a class="tab-item" href="#">
-			  <i class="icon ion-share"></i>
-			  Share
-			</a>
+				<a class="tab-item" ng-href="tel: {{place.formatted_phone_number}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;">
+				  <i class="icon ion-android-call"></i>
+				  Call us
+				</a>
+
+				<a class="tab-item" href="#" ng-click="navigate()">
+				  <i class="icon ion-map"></i>
+				  Map
+				</a>
+
+				<a class="tab-item" href="#" ng-click="share()">
+				  <i class="icon ion-share"></i>
+				  Share
+				</a>
 			</div>
 
 
