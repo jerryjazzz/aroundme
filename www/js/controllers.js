@@ -1,13 +1,30 @@
 angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar','ngCordova'])
 
+.controller('MenuController', function($scope, $state, PlaceTypeService) {
+
+	$scope.openPage = function (type){
+		// console.log(type);
+		PlaceTypeService.setPlaceType(type);
+		$state.go('places');
+	};
+})
+
 .controller('PlacesController', function($cordovaGeolocation, $ionicFilterBar, $ionicLoading, 
-	$ionicPlatform, $scope, PlacesService) {
+	$ionicPlatform, $scope, PlacesService, PlaceTypeService) {
 
 	$scope.init = function() {
+
 		$ionicLoading.show({
 	      content: 'Getting current location...',
 	      showBackdrop: false
 	    });
+
+		// console.log(PlaceTypeService.getPlaceType());
+
+		var placeType = PlaceTypeService.getPlaceType();
+
+		if(!placeType)
+			placeType="";
 	    
     	var posOptions = {
        		enableHighAccuracy: true,
@@ -17,11 +34,11 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 
         $cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
 			var coords = pos.coords.latitude + ',' + pos.coords.longitude;
-	      	console.log('Got pos', coords);
+	      	// console.log('Got pos', coords);
 			
 			// Sample coordinates : "-33.8670522,151.1957362"
-			PlacesService.getPlaces(coords).then(function(places){
-				console.log(places);
+			PlacesService.getPlaces(coords,placeType).then(function(places){
+				// console.log(places);
 
 				for(var x=0; x<places.length; x++){
 					if(places[x].opening_hours && places[x].opening_hours.open_now){
@@ -90,11 +107,11 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 	};
 
 	$scope.share = function() {
-		// var url = "http://maps.google.com/maps?z=18&q=" + 
-		// 	$scope.place.geometry.location.lat + "," + 
-		// 	$scope.place.geometry.location.lng;
+		var url = "http://maps.google.com/maps?z=18&q=" + 
+			$scope.place.geometry.location.lat + "," + 
+			$scope.place.geometry.location.lng;
 
-		var url = "http://maps.google.com/?ll=39.774769,-74.86084";
+		// var url = "http://maps.google.com/?ll=39.774769,-74.86084";
 		
         $cordovaSocialSharing.share(null, null, null, url);
 	};
