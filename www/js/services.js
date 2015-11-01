@@ -1,5 +1,21 @@
 angular.module('starter.services', [])
 
+.factory('StaticMapService', function() {
+	var API_KEY = "AIzaSyAvFX8nLPbEk3f9Fe5CRcy0SuIy4ghoXo0";
+	var staticMapURL = "https://maps.googleapis.com/maps/api/staticmap?"
+
+	var zoom = "&zoom=15";
+	var size = "&size=300x180";
+	var scale = "&scale=2";
+
+	return {
+		getCurrentLocationOnly: function(coords) {
+			// var coords = "40.7127,-74.0059";
+			return staticMapURL + "center=" + coords + zoom + size + scale + "&markers=" + coords + '&' + API_KEY;
+		}
+	}
+})
+
 .factory('PlaceTypeService', function() {
   var placeType = this;
   placeType.sharedObject = {};
@@ -20,8 +36,6 @@ angular.module('starter.services', [])
 	var placeDetailURL = "https://maps.googleapis.com/maps/api/place/details/json?";
 	var photoURL = "https://maps.googleapis.com/maps/api/place/photo?";
 
-	// "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=CmRdAAAAF7_1Sj095gDjTT0bYLyqk41lc5IIhJywwAlk3ryq7r0qX3839rU-JrN8CIKLwxTv52kxO6Y4JJbzVaRHgz1KFUKQ41EjgA9jH2qrh8VA0P0TGjl5HiecKkdSGISk-zlSEhB0XZC98Xd5XOP23qYgwivAGhSruqDpdN8jeapy72lIkUfBWT49OQ&key=AIzaSyAvFX8nLPbEk3f9Fe5CRcy0SuIy4ghoXo0"
-
 	return {
 		getPlaces: function(coords,type){
 			return $http.get(placesURL, 
@@ -32,6 +46,9 @@ angular.module('starter.services', [])
 						"key": API_KEY,
 					} 
 				}).then(function(response){
+
+					// console.log(response);
+
 					if (response.data.status == 'OK'){
 						return response.data.results;
 					}

@@ -1,16 +1,37 @@
 angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar','ngCordova'])
 
-.controller('MenuController', function($scope, $state, PlaceTypeService) {
+.controller('MenuController', function($cordovaGeolocation, $scope, $state, PlaceTypeService, StaticMapService) {
 
 	$scope.openPage = function (type){
 		// console.log(type);
 		PlaceTypeService.setPlaceType(type);
 		$state.go('places');
 	};
+
+	var posOptions = {
+   		enableHighAccuracy: true,
+    	timeout: 20000,
+    	maximumAge: 0
+    };
+
+	$cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
+		var coords = pos.coords.latitude + ',' + pos.coords.longitude;	
+		$scope.map = StaticMapService.getCurrentLocationOnly(coords);
+
+    }, function (error) {
+		alert('Unable to get location: ' + error.message);
+    });
+
 })
 
 .controller('PlacesController', function($cordovaGeolocation, $ionicFilterBar, $ionicLoading, 
 	$ionicPlatform, $scope, PlacesService, PlaceTypeService) {
+
+		$ionicLoading.show({
+	      content: 'Getting current location...',
+	      showBackdrop: false
+	    });
+
 
 	$scope.init = function() {
 
@@ -49,11 +70,20 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 				}
 
 				$scope.places = places;
+
+				if($scope.places == "")
+					$scope.places.empty = true;
+				else
+					$scope.places.empty = false;
+
+				// console.log($scope.places);
+
+				$ionicLoading.hide();
 			});
 	    }, function (error) {
+		    	$ionicLoading.hide();
 	      alert('Unable to get location: ' + error.message);
 	    });
-	    $ionicLoading.hide();
 	};
 
 	$scope.refresh = function() {
