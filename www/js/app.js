@@ -12,6 +12,7 @@ angular.module('starter', ['ionic','starter.controllers','ngCordova'])
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
+
     $stateProvider
         .state('menu', {
             url:'/menu',
@@ -28,6 +29,5 @@ angular.module('starter', ['ionic','starter.controllers','ngCordova'])
             templateUrl: "templates/place.html",
             controller: "PlaceController"
         });
-    // $urlRouterProvider.otherwise('/places');
     $urlRouterProvider.otherwise('/menu');
 });

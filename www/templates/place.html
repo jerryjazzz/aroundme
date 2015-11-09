@@ -28,24 +28,25 @@
 				<p>
 					<div class="list">
 						<div class="item item-divider">Contacts</div>
-						<a class="item" ng-href="tel: {{place.formatted_phone_number}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;">
-							<i class="icon ion-android-call"></i>
+
+						<div class="item item-icon-right" ng-click="openUrl('tel: ' + place.formatted_phone_number)">
 							{{place.formatted_phone_number}}
-						</a>
-						<a class="item" ng-href="{{place.url}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;">
-							<i class="icon ion-social-google"></i>
-							Visit Google Page
-						</a>
-						<a class="item" ng-href="{{place.website}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;">
-							<i class="icon ion-earth"></i>
-							Website
-						</a>
+							<i class="icon ion-android-call"></i>
+						</div>
 
 						<div class="item item-divider">Address</div>
-						<a class="item item-text-wrap" href="#">
-							{{place.formatted_address}}
-						</a>
 
+						<div class="item item-icon-right item-text-wrap" ng-click="openUrl(place.url)">
+							{{place.vicinity}}	
+							<i class="icon ion-map"></i>
+						</div>
+
+						<div class="item item-divider">Website</div>
+						
+						<div class="item item-icon-right item-text-wrap" ng-click="openUrl(place.website)">
+							{{place.website}}
+							<i class="icon ion-earth"></i>
+						</div>
 					</div>
 
 				</p>
@@ -57,18 +58,18 @@
 			</div>
 
 			<div class="item tabs tabs-secondary tabs-icon-left">
-				<a class="tab-item" ng-href="tel: {{place.formatted_phone_number}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;">
+	<!-- 			<a class="tab-item" ng-href="tel: {{place.formatted_phone_number}}" onclick="window.open(this.href, '_system', 'location=yes'); return false;">
 				  <i class="icon ion-android-call"></i>
 				  Call us
-				</a>
+				</a> -->
 
 				<a class="tab-item" href="#" ng-click="navigate()">
-				  <i class="icon ion-map"></i>
-				  Map
+				  <i class="icon ion-ios-navigate"></i>
+				  Directions
 				</a>
 
 				<a class="tab-item" href="#" ng-click="share()">
-				  <i class="icon ion-share"></i>
+				  <i class="icon ion-android-share-alt"></i>
 				  Share
 				</a>
 			</div>
