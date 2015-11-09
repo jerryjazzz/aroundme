@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar','ngCordova'])
+angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar','ngCordova','ngGPlaces'])
 
 .controller('MenuController', function($cordovaGeolocation, $scope, $state, PlaceTypeService, StaticMapService) {
 
@@ -25,12 +25,12 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 })
 
 .controller('PlacesController', function($cordovaGeolocation, $ionicFilterBar, $ionicLoading, 
-	$ionicPlatform, $scope, PlacesService, PlaceTypeService) {
+	$ionicPlatform, $scope, PlaceTypeService, ngGPlacesAPI) {
 
-		$ionicLoading.show({
-	      content: 'Getting current location...',
-	      showBackdrop: false
-	    });
+	$ionicLoading.show({
+      content: 'Getting current location...',
+      showBackdrop: false
+    });
 
 
 	$scope.init = function() {
@@ -54,35 +54,37 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
         };
 
         $cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
-			var coords = pos.coords.latitude + ',' + pos.coords.longitude;
-	      	// console.log('Got pos', coords);
-			
-			// Sample coordinates : "-33.8670522,151.1957362"
-			PlacesService.getPlaces(coords,placeType).then(function(places){
-				// console.log(places);
 
-				for(var x=0; x<places.length; x++){
-					if(places[x].opening_hours && places[x].opening_hours.open_now){
-						places[x].open = true;
+        	var configs = {
+        		types:[placeType],
+				radius:1000,
+				latitude:pos.coords.latitude, 
+        	 	longitude:pos.coords.longitude,
+        	};
+
+        	ngGPlacesAPI.nearbySearch(configs).then(function(data){
+				console.log(data);
+
+				for(var x=0; x<data.length; x++){
+					if(data[x].opening_hours && data[x].opening_hours.open_now){
+						data[x].open = true;
 					} else {
-						places[x].open = false;
+						data[x].open = false;
 					}
 				}
 
-				$scope.places = places;
-
-				if($scope.places == "")
-					$scope.places.empty = true;
-				else
-					$scope.places.empty = false;
-
-				// console.log($scope.places);
+				$scope.places = data;
 
 				$ionicLoading.hide();
+
+			}, function (error){
+				$ionicLoading.hide();
+				alert(error);
 			});
+
 	    }, function (error) {
-		    	$ionicLoading.hide();
-	      alert('Unable to get location: ' + error.message);
+		    $ionicLoading.hide();
+	      	alert('Unable to get location: ' + error.message);
 	    });
 	};
 
@@ -109,7 +111,7 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 })
 
 .controller('PlaceController', function($cordovaGeolocation, $cordovaSocialSharing, $ionicSlideBoxDelegate, 
-	$scope, $stateParams, PlacesService) {
+	$scope, $stateParams, PlacesService, ngGPlacesAPI) {
 
 	$scope.navigate = function() {
 		var posOptions = {
@@ -146,29 +148,31 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
         $cordovaSocialSharing.share(null, null, null, url);
 	};
 
-	PlacesService.getPlace($stateParams.placeId).then(function(place){
-		console.log(place);
-		
-		if(place.photos){
+	$scope.openUrl = function(url) {
+		window.open(url, '_system', 'location=yes'); 
+		return false;
+	};
+
+	ngGPlacesAPI.placeDetails({placeId: $stateParams.placeId}).then(function (data) {
+		console.log(data);
+
+		if(data.photos){
 			$scope.hasPhotos = true;
 
-			for(var x=0;x<place.photos.length; x++) {
-				place.photos[x].url = PlacesService.getPhoto(place.photos[x].photo_reference);
+			for(var x=0;x<data.photos.length; x++) {
+				data.photos[x].url = data.photos[x].getUrl({maxWidth:"350",maxHeight:"250"});
 			}
 			
 		}
 
-		if(place.opening_hours && place.opening_hours.open_now){
-			place.open = true;
+		if(data.opening_hours && data.opening_hours.open_now){
+			data.open = true;
 		} else {
-			place.open = false;
+			data.open = false;
 		}
 
 		$ionicSlideBoxDelegate.update();
-		
-		$scope.place = place;	
 
+		$scope.place = data;
 	});
-
-
 });
