@@ -111,7 +111,7 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 })
 
 .controller('PlaceController', function($cordovaGeolocation, $cordovaSocialSharing, $ionicSlideBoxDelegate, 
-	$scope, $stateParams, PlacesService, ngGPlacesAPI) {
+	$scope, $stateParams, ngGPlacesAPI) {
 
 	$scope.navigate = function() {
 		var posOptions = {
@@ -127,8 +127,8 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 				var url = "http://maps.google.com/maps?saddr=" + 
 					pos.coords.latitude + "," +
 					pos.coords.longitude + "&daddr=" + 
-					$scope.place.geometry.location.lat + "," + 
-					$scope.place.geometry.location.lng + "&dirflg=d";
+					$scope.place.geometry.location.lat() + "," + 
+					$scope.place.geometry.location.lng() + "&dirflg=d";
 
 				window.open(url, '_system', 'location=yes'); 
 
@@ -140,8 +140,8 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 
 	$scope.share = function() {
 		var url = "http://maps.google.com/maps?z=18&q=" + 
-			$scope.place.geometry.location.lat + "," + 
-			$scope.place.geometry.location.lng;
+			$scope.place.geometry.location.lat() + "," + 
+			$scope.place.geometry.location.lng();
 
 		// var url = "http://maps.google.com/?ll=39.774769,-74.86084";
 		
@@ -174,5 +174,6 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 		$ionicSlideBoxDelegate.update();
 
 		$scope.place = data;
+
 	});
 });
