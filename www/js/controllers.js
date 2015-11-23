@@ -1,6 +1,22 @@
-angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar','ngCordova','ngGPlaces'])
+angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces'])
 
-.controller('MenuController', function($cordovaGeolocation, $scope, $state, PlaceTypeService, StaticMapService) {
+.controller('MenuController', function($cordovaGeolocation, $ionicPlatform, $scope, $state, PlaceTypeService, StaticMapService) {
+
+	var messages = [
+		"May your life be filled with joy and happiness and may each new day bring you moments to cherish.",
+		"On this joyous day, and throughout the new year, may your life be filled with an abundance of love.",
+		"Merry Christmas and may you live a long and happy life filled with goodwill and friendship.",
+		"May this new year bring you peace and tranquility, and as you walk your path may it bring you contentment.",
+		"On this joyous day, and throughout the coming year, may your life be filled with good luck and prosperity.",
+		"May your heart be filled with the joy of giving, as it is the expression of the love in your heart and the kindness in your soul.",
+		"May the light of love shine upon you, and may your life be filled with blessings in this Christmas season.",
+		"On this most blessed day, I wish you love for all your kindness, and I hope the new year will bring you many days of happiness."
+	];
+
+	$scope.message = function() {
+		var index =	Math.round(Math.random()*7);
+		navigator.notification.alert(messages[index], null,"Merry Xmas", "Thanks");
+	};
 
 	$scope.openPage = function (type){
 		// console.log(type);
@@ -14,17 +30,17 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
     	maximumAge: 0
     };
 
-	$cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
-		var coords = pos.coords.latitude + ',' + pos.coords.longitude;	
-		$scope.map = StaticMapService.getCurrentLocationOnly(coords);
-
-    }, function (error) {
-		alert('Unable to get location: ' + error.message);
-    });
-
+    $ionicPlatform.ready(function() {
+    	$cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
+			var coords = pos.coords.latitude + ',' + pos.coords.longitude;	
+			$scope.map = StaticMapService.getCurrentLocationOnly(coords);
+	    }, function (error) {
+			alert('Unable to get location: ' + error.message);
+	    });
+	});
 })
 
-.controller('PlacesController', function($cordovaGeolocation, $ionicFilterBar, $ionicLoading, 
+.controller('PlacesController', function($cordovaGeolocation, $ionicLoading, 
 	$ionicPlatform, $scope, PlaceTypeService, ngGPlacesAPI) {
 
 	$ionicLoading.show({
@@ -63,7 +79,7 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
         	};
 
         	ngGPlacesAPI.nearbySearch(configs).then(function(data){
-				console.log(data);
+				// console.log(data);
 
 				for(var x=0; x<data.length; x++){
 					if(data[x].opening_hours && data[x].opening_hours.open_now){
@@ -95,23 +111,13 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 		$scope.$broadcast('scroll.refreshComplete');
 	};
 
-	$scope.showFilterBar = function(){
-		$ionicFilterBar.show({
-			items: $scope.places,
-			update: function(filteredData) {
-				$scope.places = filteredData;
-			},
-			filterProperties: $scope.places.name
-		});
-	};
-
     $ionicPlatform.ready(function() {
 		$scope.init();
 	});
 })
 
 .controller('PlaceController', function($cordovaGeolocation, $cordovaSocialSharing, $ionicSlideBoxDelegate, 
-	$scope, $stateParams, ngGPlacesAPI) {
+	$ionicPlatform, $scope, $stateParams, ngGPlacesAPI) {
 
 	$scope.navigate = function() {
 		var posOptions = {
@@ -153,27 +159,54 @@ angular.module('starter.controllers', ['starter.services','jett.ionic.filter.bar
 		return false;
 	};
 
-	ngGPlacesAPI.placeDetails({placeId: $stateParams.placeId}).then(function (data) {
-		console.log(data);
+    $ionicPlatform.ready(function() {
+		ngGPlacesAPI.placeDetails({placeId: $stateParams.placeId}).then(function (data) {
+			// console.log(data);
 
-		if(data.photos){
-			$scope.hasPhotos = true;
+			if(data.photos){
+				$scope.hasPhotos = true;
 
-			for(var x=0;x<data.photos.length; x++) {
-				data.photos[x].url = data.photos[x].getUrl({maxWidth:"350",maxHeight:"250"});
+				for(var x=0;x<data.photos.length; x++) {
+					data.photos[x].url = data.photos[x].getUrl({maxWidth:"350",maxHeight:"250"});
+				}
+				
 			}
-			
-		}
 
-		if(data.opening_hours && data.opening_hours.open_now){
-			data.open = true;
-		} else {
-			data.open = false;
-		}
+			if(data.opening_hours && data.opening_hours.open_now){
+				data.open = true;
+			} else {
+				data.open = false;
+			}
 
-		$ionicSlideBoxDelegate.update();
+			$ionicSlideBoxDelegate.update();
 
-		$scope.place = data;
+			$scope.place = data;
+
+		});
+
+		var admobid = {};
+	    // select the right Ad Id according to platform
+	    if( /(android)/i.test(navigator.userAgent) ) { 
+	        admobid = { // for Android
+	            banner: 'ca-app-pub-2787085904720807/7587638979',
+	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
+	        };
+	    } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
+	        admobid = { // for iOS
+	            banner: 'ca-app-pub-2787085904720807/7587638979',
+	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
+	        };
+	    } else {
+	        admobid = { // for Windows Phone
+	            banner: 'ca-app-pub-2787085904720807/7587638979',
+	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
+	        };
+	    }
+	 
+	    if(window.AdMob) AdMob.createBanner( {
+	        adId:admobid.banner, 
+	        position:AdMob.AD_POSITION.BOTTOM_CENTER, 
+	        autoShow:true} );
 
 	});
 });
