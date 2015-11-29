@@ -21,7 +21,7 @@ angular.module('starter', ['ionic','starter.controllers','ngCordova'])
 
     AppRate.preferences.openStoreInApp = true;
 
-    AppRate.preferences.storeAppURL.android = 'market://details?id=<com.ionic.aroundme>';
+    AppRate.preferences.storeAppURL.android = 'market://details?id=com.ionic.aroundme';
 
     AppRate.preferences.usesUntilPrompt = 10;
     AppRate.promptForRating();
