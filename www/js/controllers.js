@@ -1,5 +1,9 @@
 angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces'])
 
+.controller('CategoryController', function($scope) {
+
+})
+
 .controller('MenuController', function($cordovaGeolocation, $ionicPlatform, $scope, $state, PlaceTypeService, StaticMapService) {
 
 	var messages = [
