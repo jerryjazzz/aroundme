@@ -9,6 +9,15 @@ angular.module('starter', ['ionic','starter.controllers','ngCordova'])
       StatusBar.styleDefault();
     }
 
+    // // Google Analytics
+    // if(typeof analytics !== undefined){
+    //     analytics.startTrackerWithId('UA-66786839-1');
+    //     analytics.trackView("category");
+    // } else {
+    //     alert('Google Analytics unavailable');
+    // }
+
+    // App Rate
     AppRate.preferences.useLanguage = 'en';
 
     var popupInfo = {};
@@ -25,6 +34,8 @@ angular.module('starter', ['ionic','starter.controllers','ngCordova'])
 
     AppRate.preferences.usesUntilPrompt = 10;
     AppRate.promptForRating();
+
+
   });
 })
 

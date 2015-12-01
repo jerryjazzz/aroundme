@@ -1,11 +1,10 @@
 angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces'])
 
 .controller('CategoryController', function($scope) {
-
 })
 
 .controller('MenuController', function($cordovaGeolocation, $ionicPlatform, $scope, $state, PlaceTypeService, StaticMapService) {
-
+ 
 	var messages = [
 		"May your life be filled with joy and happiness and may each new day bring you moments to cherish.",
 		"On this joyous day, and throughout the new year, may your life be filled with an abundance of love.",
@@ -46,7 +45,7 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 
 .controller('PlacesController', function($cordovaGeolocation, $ionicLoading, 
 	$ionicPlatform, $scope, PlaceTypeService, ngGPlacesAPI) {
-
+ 
 	$ionicLoading.show({
       content: 'Getting current location...',
       showBackdrop: false
@@ -117,12 +116,36 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 
     $ionicPlatform.ready(function() {
 		$scope.init();
+
+		var admobid = {};
+	    // select the right Ad Id according to platform
+	    if( /(android)/i.test(navigator.userAgent) ) { 
+	        admobid = { // for Android
+	            banner: 'ca-app-pub-2787085904720807/7587638979',
+	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
+	        };
+	    } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
+	        admobid = { // for iOS
+	            banner: 'ca-app-pub-2787085904720807/7587638979',
+	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
+	        };
+	    } else {
+	        admobid = { // for Windows Phone
+	            banner: 'ca-app-pub-2787085904720807/7587638979',
+	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
+	        };
+	    }
+	 
+	    if(window.AdMob) AdMob.createBanner( {
+	        adId:admobid.banner, 
+	        position:AdMob.AD_POSITION.BOTTOM_CENTER, 
+	        autoShow:true} );
 	});
 })
 
 .controller('PlaceController', function($cordovaGeolocation, $cordovaSocialSharing, $ionicSlideBoxDelegate, 
 	$ionicPlatform, $scope, $stateParams, ngGPlacesAPI) {
-
+ 
 	$scope.navigate = function() {
 		var posOptions = {
 	   		enableHighAccuracy: true,
@@ -187,30 +210,6 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 			$scope.place = data;
 
 		});
-
-		var admobid = {};
-	    // select the right Ad Id according to platform
-	    if( /(android)/i.test(navigator.userAgent) ) { 
-	        admobid = { // for Android
-	            banner: 'ca-app-pub-2787085904720807/7587638979',
-	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
-	        };
-	    } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
-	        admobid = { // for iOS
-	            banner: 'ca-app-pub-2787085904720807/7587638979',
-	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
-	        };
-	    } else {
-	        admobid = { // for Windows Phone
-	            banner: 'ca-app-pub-2787085904720807/7587638979',
-	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
-	        };
-	    }
-	 
-	    if(window.AdMob) AdMob.createBanner( {
-	        adId:admobid.banner, 
-	        position:AdMob.AD_POSITION.BOTTOM_CENTER, 
-	        autoShow:true} );
 
 	});
 });
