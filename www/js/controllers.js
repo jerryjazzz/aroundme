@@ -74,11 +74,14 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 
         $cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
 
+			// var coords = "40.7127,-74.0059";
         	var configs = {
         		types:[placeType],
 				radius:1000,
 				latitude:pos.coords.latitude, 
         	 	longitude:pos.coords.longitude,
+        	 	// latitude: "40.7127",
+        	 	// longitude: "-74.0059"
         	};
 
         	ngGPlacesAPI.nearbySearch(configs).then(function(data){

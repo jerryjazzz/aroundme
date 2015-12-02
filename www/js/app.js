@@ -21,11 +21,11 @@ angular.module('starter', ['ionic','starter.controllers','ngCordova'])
     AppRate.preferences.useLanguage = 'en';
 
     var popupInfo = {};
-    popupInfo.title = "Rate Us Now";
-    popupInfo.message = "Do you like this app? Please take some time to rate us.";
+    popupInfo.title = "Thank you";
+    popupInfo.message = "Do you like this app? If yes, please take some time to rate us and drop a review.";
     popupInfo.cancelButtonLabel = "No, thanks";
-    popupInfo.laterButtonLabel = "Remind me later";
-    popupInfo.rateButtonLabel = "Rate now";
+    popupInfo.laterButtonLabel = "Maybe later";
+    popupInfo.rateButtonLabel = "Yes! I will rate now";
     AppRate.preferences.customLocale = popupInfo;
 
     AppRate.preferences.openStoreInApp = true;
