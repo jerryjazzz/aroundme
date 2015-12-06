@@ -9104,3 +9104,15 @@ a.button {
 
 .icon-row {
   -webkit-align-items: center; }
+
+.ionic_ratings .read_only {
+  pointer-events: none !important; }
+
+.slider {
+  height: 200px;
+  /* slider height you want */ }
+
+.slider-slide {
+  color: #000;
+  background-color: #fff;
+  height: 100%; }

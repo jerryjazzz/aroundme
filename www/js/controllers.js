@@ -3,7 +3,7 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 .controller('CategoryController', function($scope) {
 })
 
-.controller('MenuController', function($cordovaGeolocation, $ionicPlatform, $scope, $state, PlaceTypeService, StaticMapService) {
+.controller('MenuController', function($cordovaGeolocation, $scope, $state, PlaceTypeService) {
  
 	var messages = [
 		"May your life be filled with joy and happiness and may each new day bring you moments to cherish.",
@@ -33,14 +33,15 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
     	maximumAge: 0
     };
 
-    $ionicPlatform.ready(function() {
-    	$cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
-			var coords = pos.coords.latitude + ',' + pos.coords.longitude;	
-			$scope.map = StaticMapService.getCurrentLocationOnly(coords);
-	    }, function (error) {
-			alert('Unable to get location: ' + error.message);
-	    });
-	});
+ //    $ionicPlatform.ready(function() {
+ //    	$cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
+	// 		var coords = pos.coords.latitude + ',' + pos.coords.longitude;	
+	// 		$scope.map = StaticMapService.getCurrentLocationOnly(coords);
+	//     }, function (error) {
+	// 		// alert('Unable to get location: ' + error.message);
+	// 		navigator.notification.alert('Unable to get location: ' + error.message, null,"Info", "OK");
+	//     });
+	// });
 })
 
 .controller('PlacesController', function($cordovaGeolocation, $ionicLoading, 
@@ -93,20 +94,39 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 					} else {
 						data[x].open = false;
 					}
+
+					if (data[x].rating) {
+						data[x].rating = {
+							iconOn: 'ion-ios-star',    			//Optional
+					        iconOff: 'ion-ios-star-outline',   	//Optional
+					        rating: Math.round(data[x].rating),	//Optional
+					        readOnly: true, 					//Optional
+					        callback: function(rating) {    	//Mandatory
+					          // $scope.ratingsCallback(rating);
+        					}
+						};
+					} else {
+						data[x].rating = false;
+					}
 				}
 
 				$scope.places = data;
+
+				// console.log(data);
 
 				$ionicLoading.hide();
 
 			}, function (error){
 				$ionicLoading.hide();
-				alert(error);
+				// alert(error);
+				navigator.notification.alert(error, null,"Info", "OK");
 			});
 
 	    }, function (error) {
 		    $ionicLoading.hide();
-	      	alert('Unable to get location: ' + error.message);
+	      	// alert('Unable to get location: ' + error.message);
+	      	navigator.notification.alert('Unable to get location: ' + error.message, null,"Info", "OK");
+
 	    });
 	};
 
@@ -170,7 +190,8 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 
 				return false;
 	    }, function (error) {
-	      alert('Unable to get location: ' + error.message);
+	      // alert('Unable to get location: ' + error.message);
+	      navigator.notification.alert('Unable to get location: ' + error.message, null,"Info", "OK");
 	    });
 	};
 
@@ -197,7 +218,7 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 				$scope.hasPhotos = true;
 
 				for(var x=0;x<data.photos.length; x++) {
-					data.photos[x].url = data.photos[x].getUrl({maxWidth:"350",maxHeight:"250"});
+					data.photos[x].url = data.photos[x].getUrl({ 'maxWidth': 350, 'maxHeight': 200 });
 				}
 				
 			}
@@ -208,9 +229,13 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 				data.open = false;
 			}
 
+			// console.log(data);
+
 			$ionicSlideBoxDelegate.update();
 
 			$scope.place = data;
+
+			console.log($scope.place);
 
 		});
 

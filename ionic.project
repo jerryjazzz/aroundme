@@ -1,4 +1,12 @@
 {
-  "name": "aroundme2",
-  "app_id": ""
+  "name": "aroundme",
+  "app_id": "",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
 }

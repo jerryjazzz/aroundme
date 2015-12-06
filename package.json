@@ -1,7 +1,7 @@
 {
-  "name": "aroundme2",
+  "name": "aroundme",
   "version": "1.1.1",
-  "description": "aroundme2: An Ionic project",
+  "description": "aroundme: An Ionic project",
   "dependencies": {
     "gulp": "^3.5.6",
     "gulp-sass": "^2.0.4",
@@ -23,7 +23,6 @@
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [
-    "ios",
     "android"
   ]
 }

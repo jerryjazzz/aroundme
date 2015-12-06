@@ -1,6 +1,6 @@
 <ion-view title="List of Places">
 
-    <ion-content padding="true">
+    <ion-content padding="false">
 
         <ion-refresher on-refresh="refresh()"></ion-refresher>
 
@@ -9,6 +9,8 @@
                 <img ng-src={{place.icon}}>
                 <h2>{{place.name}}</h2>
                 <p>{{place.vicinity}}</p>
+
+                <ionic-ratings ng-show="{{place.rating}}" ratingsobj="place.rating"></ionic-ratings>
 
                 <img ng-show="{{place.open}}" ng-src="img/now_open.png" class="button button-clear">
             </a>

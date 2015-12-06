@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic','starter.controllers','ngCordova'])
+angular.module('starter', ['ionic','ionic-ratings','starter.controllers','ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -9,9 +9,9 @@ angular.module('starter', ['ionic','starter.controllers','ngCordova'])
       StatusBar.styleDefault();
     }
 
-    // // Google Analytics
+    // Google Analytics
     // if(typeof analytics !== undefined){
-    //     analytics.startTrackerWithId('UA-66786839-1');
+    //     analytics.startTrackerWithId('UA-71005608-1');
     //     analytics.trackView("category");
     // } else {
     //     alert('Google Analytics unavailable');
