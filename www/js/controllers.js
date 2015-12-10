@@ -22,26 +22,9 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 	};
 
 	$scope.openPage = function (type){
-		// console.log(type);
 		PlaceTypeService.setPlaceType(type);
 		$state.go('places');
 	};
-
-	var posOptions = {
-   		enableHighAccuracy: true,
-    	timeout: 20000,
-    	maximumAge: 0
-    };
-
- //    $ionicPlatform.ready(function() {
- //    	$cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
-	// 		var coords = pos.coords.latitude + ',' + pos.coords.longitude;	
-	// 		$scope.map = StaticMapService.getCurrentLocationOnly(coords);
-	//     }, function (error) {
-	// 		// alert('Unable to get location: ' + error.message);
-	// 		navigator.notification.alert('Unable to get location: ' + error.message, null,"Info", "OK");
-	//     });
-	// });
 })
 
 .controller('PlacesController', function($cordovaGeolocation, $ionicLoading, 
@@ -86,9 +69,14 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
         	};
 
         	ngGPlacesAPI.nearbySearch(configs).then(function(data){
-				// console.log(data);
+				console.log(data);
 
 				for(var x=0; x<data.length; x++){
+
+					if(data[x].photos){
+						data[x].icon = data[x].photos[0].getUrl({ 'maxWidth': 75, 'maxHeight': 75 });
+					}
+
 					if(data[x].opening_hours && data[x].opening_hours.open_now){
 						data[x].open = true;
 					} else {
@@ -112,19 +100,15 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 
 				$scope.places = data;
 
-				// console.log(data);
-
 				$ionicLoading.hide();
 
 			}, function (error){
 				$ionicLoading.hide();
-				// alert(error);
 				navigator.notification.alert(error, null,"Info", "OK");
 			});
 
 	    }, function (error) {
 		    $ionicLoading.hide();
-	      	// alert('Unable to get location: ' + error.message);
 	      	navigator.notification.alert('Unable to get location: ' + error.message, null,"Info", "OK");
 
 	    });
