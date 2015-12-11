@@ -227,10 +227,14 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 		return false;
 	};
 
-
-
+	$scope.toggle = function(){
+		$scope.expand = !$scope.expand;
+	}
 
     $ionicPlatform.ready(function() {
+
+    	$scope.expand = false;
+
 		ngGPlacesAPI.placeDetails({placeId: $stateParams.placeId}).then(function (data) {
 
 			if(data.photos){
@@ -268,6 +272,37 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 				data.open = true;
 			} else {
 				data.open = false;
+			}
+
+			if(data.opening_hours)
+			{
+				for(var x=0; x<data.opening_hours.periods.length; x++)
+				{
+					switch (data.opening_hours.periods[x].open.day)
+					{
+						case 0:
+							data.opening_hours.periods[x].open.day = 'Sunday';
+							break;
+						case 1:
+							data.opening_hours.periods[x].open.day = 'Monday';
+							break;
+						case 2:
+							data.opening_hours.periods[x].open.day = 'Tuesday';
+							break;
+						case 3:
+							data.opening_hours.periods[x].open.day = 'Wednesday';
+							break;
+						case 4:
+							data.opening_hours.periods[x].open.day = 'Thursday';
+							break;
+						case 5:
+							data.opening_hours.periods[x].open.day = 'Friday';
+							break;
+						default:
+							data.opening_hours.periods[x].open.day = 'Saturday';
+							break;
+					}
+				}
 			}
 
 			$ionicSlideBoxDelegate.update();

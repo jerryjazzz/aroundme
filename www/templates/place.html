@@ -49,16 +49,29 @@
 			</div>
 
 			<div class="item item-icon-left item-icon-right" ng-click="navigate()">
-				  <i class="icon ion-ios-navigate"></i>
-				  Directions
-				  <i class="icon ion-chevron-right"></i>
+				<i class="icon ion-ios-navigate"></i>
+				Directions
+				<i class="icon ion-chevron-right"></i>
 			</div>
 
-			<div class="item item-icon-left item-icon-right" ng-click="">
-				  <i class="icon ion-android-time"></i>
-				  Operating Hours
-				  <i class="icon ion-chevron-right"></i>
+			<div class="item item-icon-left item-icon-right" ng-click="toggle()">
+				<i class="icon ion-android-time"></i>
+				Operating Hours
+				<i class="icon ion-chevron-right"></i>
 			</div>
+
+			<div ng-show="expand" class="item" ng-repeat="period in place.opening_hours.periods">
+				<div class="row">
+					<div class="col">
+						{{period.open.day}}
+					</div>
+					<div class="col" style="color:green">
+						{{period.open.time}}
+					</div>
+				</div>
+
+			</div>
+
 
 		</div>
     </ion-content>
