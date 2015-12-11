@@ -12,8 +12,6 @@
 
 		<div class="row">
 			<div class="col">
-
-
 				<a class="tab-item" href="#" ng-click="openUrl(place.url)">
 				  <i class="icon ion-map"></i>
 				  Map
@@ -57,7 +55,7 @@
 			<div class="item item-icon-left item-icon-right" ng-click="toggle()">
 				<i class="icon ion-android-time"></i>
 				Operating Hours
-				<i class="icon ion-chevron-right"></i>
+				<i ng-class="expand ? 'icon ion-chevron-down' : 'icon ion-chevron-right'"></i>
 			</div>
 
 			<div ng-show="expand" class="item" ng-repeat="period in place.opening_hours.periods">
@@ -69,9 +67,13 @@
 						{{period.open.time}}
 					</div>
 				</div>
-
 			</div>
 
+			<div class="item item-icon-left item-icon-right" ng-click="openUrl(place.website)">
+				<i class="icon ion-earth"></i>
+					Visit Website
+				<i class="icon ion-chevron-right"></i>
+			</div>
 
 		</div>
     </ion-content>

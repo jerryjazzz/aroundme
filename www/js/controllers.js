@@ -59,14 +59,14 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
         	var configs = {
         		types:[placeType],
 				radius:1000,
-				// latitude:pos.coords.latitude, 
-        	 	// longitude:pos.coords.longitude,
-        	 	latitude: "40.7127",
-        	 	longitude: "-74.0059"
+				latitude:pos.coords.latitude, 
+        	 	longitude:pos.coords.longitude,
+        	 	// latitude: "40.7127",
+        	 	// longitude: "-74.0059"
         	};
 
         	ngGPlacesAPI.nearbySearch(configs).then(function(data){
-				console.log(data);
+				// console.log(data);
 
 				for(var x=0; x<data.length; x++){
 
@@ -142,30 +142,6 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 
     $ionicPlatform.ready(function() {
 		$scope.init();
-
-		var admobid = {};
-	    // select the right Ad Id according to platform
-	    if( /(android)/i.test(navigator.userAgent) ) { 
-	        admobid = { // for Android
-	            banner: 'ca-app-pub-2787085904720807/7587638979',
-	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
-	        };
-	    } else if(/(ipod|iphone|ipad)/i.test(navigator.userAgent)) {
-	        admobid = { // for iOS
-	            banner: 'ca-app-pub-2787085904720807/7587638979',
-	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
-	        };
-	    } else {
-	        admobid = { // for Windows Phone
-	            banner: 'ca-app-pub-2787085904720807/7587638979',
-	            interstitial: 'ca-app-pub-2787085904720807/7587638979'
-	        };
-	    }
-	 
-	    if(window.AdMob) AdMob.createBanner( {
-	        adId:admobid.banner, 
-	        position:AdMob.AD_POSITION.BOTTOM_CENTER, 
-	        autoShow:true} );
 	});
 })
 
@@ -309,7 +285,7 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 
 			$scope.place = data;
 
-			console.log($scope.place);
+			// console.log($scope.place);
 
 		});
 
