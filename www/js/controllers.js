@@ -43,8 +43,6 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 	      showBackdrop: false
 	    });
 
-		// console.log(PlaceTypeService.getPlaceType());
-
 		var placeType = PlaceTypeService.getPlaceType();
 
 		if(!placeType)
@@ -58,14 +56,13 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 
         $cordovaGeolocation.getCurrentPosition(posOptions).then(function (pos) {
 
-			// var coords = "40.7127,-74.0059";
         	var configs = {
         		types:[placeType],
 				radius:1000,
-				latitude:pos.coords.latitude, 
-        	 	longitude:pos.coords.longitude,
-        	 	// latitude: "40.7127",
-        	 	// longitude: "-74.0059"
+				// latitude:pos.coords.latitude, 
+        	 	// longitude:pos.coords.longitude,
+        	 	latitude: "40.7127",
+        	 	longitude: "-74.0059"
         	};
 
         	ngGPlacesAPI.nearbySearch(configs).then(function(data){
@@ -81,6 +78,28 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 						data[x].open = true;
 					} else {
 						data[x].open = false;
+					}
+
+					if(data[x].price_level) {
+						switch(data[x].price_level) {
+						    case 1:
+						    	data[x].price_level = '$';
+						        break;
+						    case 2:
+						        data[x].price_level = '$$';
+						        break;
+						    case 3:
+						    	data[x].price_level = '$$$';
+						    	break;
+						    case 4:
+						    	data[x].price_level = '$$$$';
+						    	break;
+						    default:
+						    	data[x].price_level = 0;
+						}
+					}
+					else {
+						data[x].price_level = 0;
 					}
 
 					if (data[x].rating) {
@@ -151,8 +170,22 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 })
 
 .controller('PlaceController', function($cordovaGeolocation, $cordovaSocialSharing, $ionicSlideBoxDelegate, 
-	$ionicPlatform, $scope, $stateParams, ngGPlacesAPI) {
+	$ionicModal, $ionicPlatform, $scope, $stateParams, ngGPlacesAPI) {
  
+	$ionicModal.fromTemplateUrl('reviews.html', function(modal) {
+	    $scope.reviewsModal = modal;
+	}, {
+		  scope: $scope
+	});
+
+	$scope.openModal = function(){
+		$scope.reviewsModal.show();
+	};
+
+	$scope.closeModal = function(){
+		$scope.reviewsModal.hide();
+	};
+
 	$scope.navigate = function() {
 		var posOptions = {
 	   		enableHighAccuracy: true,
@@ -194,17 +227,41 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 		return false;
 	};
 
+
+
+
     $ionicPlatform.ready(function() {
 		ngGPlacesAPI.placeDetails({placeId: $stateParams.placeId}).then(function (data) {
-			// console.log(data);
 
 			if(data.photos){
 				$scope.hasPhotos = true;
 
 				for(var x=0;x<data.photos.length; x++) {
-					data.photos[x].url = data.photos[x].getUrl({ 'maxWidth': 350, 'maxHeight': 200 });
+					data.photos[x].url = data.photos[x].getUrl({ 'maxWidth': 350, 'maxHeight': 300 });
 				}
 				
+			}
+
+			if(data.price_level) {
+				switch(data.price_level) {
+				    case 1:
+				    	data.price_level = '$';
+				        break;
+				    case 2:
+				        data.price_level = '$$';
+				        break;
+				    case 3:
+				    	data.price_level = '$$$';
+				    	break;
+				    case 4:
+				    	data.price_level = '$$$$';
+				    	break;
+				    default:
+				    	data.price_level = 0;
+				}
+			}
+			else {
+				data.price_level = 0;
 			}
 
 			if(data.opening_hours && data.opening_hours.open_now){
@@ -212,8 +269,6 @@ angular.module('starter.controllers', ['starter.services','ngCordova','ngGPlaces
 			} else {
 				data.open = false;
 			}
-
-			// console.log(data);
 
 			$ionicSlideBoxDelegate.update();
 

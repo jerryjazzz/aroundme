@@ -10,8 +10,8 @@
                 <h2>{{place.name}}</h2>
                 <ionic-ratings ng-show="{{place.rating}}" ratingsobj="place.rating"></ionic-ratings>
                 <p>{{place.vicinity}}</p>
-                <p ng-show="{{place.open}}" style="color:green">Open</p>
-                <!-- <img ng-show="{{place.open}}" ng-src="img/now_open.png" class="button button-clear"> -->
+                <p ng-show="place.open" style="color:green">Open</p>
+                <p ng-show="place.price_level" style="color:red">{{place.price_level}}</p>
             </a>
         </div>
     </ion-content>

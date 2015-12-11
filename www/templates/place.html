@@ -1,6 +1,5 @@
 <ion-view title="{{place.name}}">
 
-
     <ion-content padding="false">
 		<div class="item item-avatar item-text-wrap item-button-right">
 			<img ng-src={{place.icon}}>
@@ -8,16 +7,13 @@
 			<p ng-show="place.rating">{{place.rating}}  <i class="ion-ios-star" style="font-size:12px"></i></p>
             <p>{{place.vicinity}}</p>
             <p ng-show="place.open" style="color:green">Open</p>
+            <p ng-show="place.price_level" style="color:red">{{place.price_level}}</p>
 		</div>
 
 		<div class="row">
-<!-- 			<div class="col">
-				<a class="tab-item" href="#" ng-click="navigate()">
-				  <i class="icon ion-ios-navigate"></i>
-				  Directions
-				</a>
-			</div> -->
 			<div class="col">
+
+
 				<a class="tab-item" href="#" ng-click="openUrl(place.url)">
 				  <i class="icon ion-map"></i>
 				  Map
@@ -39,6 +35,9 @@
 					</ion-slide>				
 				</ion-slide-box>
 			</div>
+			<p>
+				<a href="#" ng-click="openModal()" class="subdued">{{place.reviews.length}} Reviews</a>
+			</p>
 		</div>
 
 		<div class="list list-inset">
@@ -49,24 +48,46 @@
 				<i class="icon ion-chevron-right"></i>
 			</div>
 
-<!-- 			<div class="item item-icon-right item-text-wrap" ng-click="openUrl(place.url)">
-				{{place.vicinity}}	
-				<i class="icon ion-map"></i>
-			</div> -->
-
 			<div class="item item-icon-left item-icon-right" ng-click="navigate()">
 				  <i class="icon ion-ios-navigate"></i>
 				  Directions
 				  <i class="icon ion-chevron-right"></i>
 			</div>
 
-			<div class="item item-divider">Website</div>
-			
-			<div class="item item-icon-right item-text-wrap" ng-click="openUrl(place.website)">
-				{{place.website}}
-				<i class="icon ion-earth"></i>
+			<div class="item item-icon-left item-icon-right" ng-click="">
+				  <i class="icon ion-android-time"></i>
+				  Operating Hours
+				  <i class="icon ion-chevron-right"></i>
 			</div>
+
 		</div>
     </ion-content>
 </ion-view>
 
+<!-- Reviews Pop up -->
+<script id="reviews.html" type="text/ng-template">
+    <div class="modal">
+
+        <ion-header-bar class="bar-calm">
+        	<h1 class="title">Reviews & Highlights</h1>
+          	<button class="button button-clear" ng-click="closeModal()">Cancel
+	        </button>
+        </ion-header-bar>
+
+        <ion-content>
+            <div class="list">
+	            <a ng-repeat="review in place.reviews" class="item item-thumbnail-left item-text-wrap">
+	                <img ng-src={{review.profile_photo_url}}>
+	                <h2>{{review.author_name}}</h2>
+	                <p>{{review.rating}}
+	                	<i class="ion-ios-star" style="font-size:12px"></i>
+	                </p>
+	                <p>{{review.text}}</p>
+	            </a>
+        	</div>
+        </ion-content>
+      </div>
+    </div>
+
+
+</script>
